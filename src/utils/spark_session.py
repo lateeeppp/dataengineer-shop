@@ -12,12 +12,17 @@ def get_spark_session(app_name: str) -> SparkSession:
         .config("spark.driver.memory", "4g")
         .config("spark.sql.session.timeZone", "UTC")
         .config("spark.sql.sources.partitionOverwriteMode", "dynamic")
+        .config("spark.sql.shuffle.partitions", "10")
+        .config("spark.network.timeout", "800s")
+        .config("spark.executor.heartbeatInterval", "60s")
         .config("spark.hadoop.fs.s3a.input.stream.type", "classic")
     )
 
     if os.getenv("AWS_PROFILE") or os.getenv("AWS_ACCESS_KEY_ID") or os.getenv("AWS_REGION"):
         builder = (
             builder
+            .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.5.0")
+            .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
             .config("spark.hadoop.fs.s3a.endpoint.region", region)
             .config("spark.hadoop.fs.s3a.endpoint", f"s3.{region}.amazonaws.com")
             .config("spark.hadoop.fs.s3a.path.style.access", "false")
