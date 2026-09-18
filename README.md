@@ -35,11 +35,11 @@ Proyek ini mendemonstrasikan alur kerja Data Engineering end-to-end — dari ing
 
 ---
 
-<!-- ## 🗄️ Data Model
+<!-- ## 🗄️ Data Model -->
 
 <!-- TODO: Ganti dengan gambar Star Schema yang sudah dibuat -->
 
-![Star Schema](docs/star_schema.png) -->
+<!-- ![Star Schema](docs/star_schema.png) -->
 
 ---
 
