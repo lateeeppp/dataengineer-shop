@@ -27,10 +27,13 @@ def main(execution_date: str, raw_path: str, silver_path: str):
             F.current_timestamp().alias("updated_at"),
         )
         .dropDuplicates(["seller_id"])
+        .cache()
     )
 
+    row_count = dim_seller.count()
     dim_seller.write.mode("overwrite").parquet(f"{silver_path}/dim_seller")
-    print(f"dim_seller saved. Rows: {dim_seller.count()}")
+    print(f"dim_seller saved. Rows: {row_count}")
+    dim_seller.unpersist()
     spark.stop()
 
 

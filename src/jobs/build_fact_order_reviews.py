@@ -40,10 +40,13 @@ def main(execution_date: str, raw_path: str, silver_path: str):
             "date_key",
         )
         .dropDuplicates(["review_id"])
+        .cache()
     )
 
+    row_count = fact_order_reviews.count()
     fact_order_reviews.write.mode("overwrite").partitionBy("purchase_date").parquet(f"{silver_path}/fact_order_reviews")
-    print(f"fact_order_reviews saved. Rows: {fact_order_reviews.count()}")
+    print(f"fact_order_reviews saved. Rows: {row_count}")
+    fact_order_reviews.unpersist()
     spark.stop()
 
 

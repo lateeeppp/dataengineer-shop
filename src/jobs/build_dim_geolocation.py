@@ -30,10 +30,13 @@ def main(execution_date: str, raw_path: str, silver_path: str):
             "city",
             "state",
         )
+        .cache()
     )
 
+    row_count = dim_geolocation.count()
     dim_geolocation.write.mode("overwrite").parquet(f"{silver_path}/dim_geolocation")
-    print(f"dim_geolocation saved. Rows: {dim_geolocation.count()}")
+    print(f"dim_geolocation saved. Rows: {row_count}")
+    dim_geolocation.unpersist()
     spark.stop()
 
 

@@ -29,10 +29,13 @@ def main(execution_date: str, raw_path: str, silver_path: str):
             "purchase_date",
             "date_key",
         )
+        .cache()
     )
 
+    row_count = fact_order_payments.count()
     fact_order_payments.write.mode("overwrite").partitionBy("purchase_date").parquet(f"{silver_path}/fact_order_payments")
-    print(f"fact_order_payments saved. Rows: {fact_order_payments.count()}")
+    print(f"fact_order_payments saved. Rows: {row_count}")
+    fact_order_payments.unpersist()
     spark.stop()
 
 

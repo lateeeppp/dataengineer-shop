@@ -36,10 +36,13 @@ def build_daily_sales_summary(spark, silver_path, gold_path):
             how="left",
         )
         .orderBy("purchase_date")
+        .cache()
     )
 
+    row_count = daily_sales.count()
     daily_sales.write.mode("overwrite").parquet(f"{gold_path}/daily_sales_summary")
-    print("daily_sales_summary saved.")
+    print(f"daily_sales_summary saved. Rows: {row_count}")
+    daily_sales.unpersist()
 
 
 def build_seller_performance_daily(spark, silver_path, gold_path):
@@ -74,10 +77,13 @@ def build_seller_performance_daily(spark, silver_path, gold_path):
             F.avg("total_revenue").alias("avg_order_value"),
         )
         .orderBy("purchase_date", F.desc("total_revenue"))
+        .cache()
     )
 
+    row_count = seller_perf.count()
     seller_perf.write.mode("overwrite").parquet(f"{gold_path}/seller_performance_daily")
-    print("seller_performance_daily saved.")
+    print(f"seller_performance_daily saved. Rows: {row_count}")
+    seller_perf.unpersist()
 
 def build_category_performance(spark, silver_path, gold_path):
     fact_orders = spark.read.parquet(f"{silver_path}/fact_orders")
@@ -101,11 +107,13 @@ def build_category_performance(spark, silver_path, gold_path):
             F.avg("total_revenue").alias("avg_order_value"),
         )
         .orderBy(F.desc("total_revenue"))
+        .cache()
     )
 
+    row_count = category_perf.count()
     category_perf.write.mode("overwrite").parquet(f"{gold_path}/category_performance")
-    print("category_performance saved.")
-    category_perf.show(10, truncate=False)
+    print(f"category_performance saved. Rows: {row_count}")
+    category_perf.unpersist()
 
 def build_daily_review_summary(spark, silver_path, gold_path):
     fact_order_reviews = spark.read.parquet(f"{silver_path}/fact_order_reviews")
@@ -120,11 +128,13 @@ def build_daily_review_summary(spark, silver_path, gold_path):
             F.min("review_score").alias("min_review_score"),
         )
         .orderBy("purchase_date")
+        .cache()
     )
 
+    row_count = review_summary.count()
     review_summary.write.mode("overwrite").parquet(f"{gold_path}/daily_review_summary")
-    print("daily_review_summary saved.")
-    review_summary.show(10, truncate=False)
+    print(f"daily_review_summary saved. Rows: {row_count}")
+    review_summary.unpersist()
 
 
 def main(silver_path: str, gold_path: str):

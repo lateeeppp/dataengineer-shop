@@ -58,11 +58,14 @@ def main(execution_date: str, raw_path: str, silver_path: str):
             "end_date",
             "is_current",
         )
+        .cache()
     )
 
+    row_count = dim_customer_scd2.count()
     dim_customer_scd2.write.mode("overwrite").parquet(f"{silver_path}/dim_customer")
+    print(f"dim_customer (SCD Type 2) successfully saved. Rows: {row_count}")
+    dim_customer_scd2.unpersist()
     spark.stop()
-    print("dim_customer (SCD Type 2) successfully saved.")
 
 
 if __name__ == "__main__":

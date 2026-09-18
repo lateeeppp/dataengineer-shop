@@ -31,11 +31,14 @@ def main(execution_date: str, silver_path: str):
         .withColumn("day_name", F.date_format("calendar_date", "EEEE"))
         .withColumn("quarter", F.quarter("calendar_date"))
         .withColumn("is_weekend", F.when(F.col("day_of_week").isin(1, 7), True).otherwise(False))
+        .cache()
     )
 
+    row_count = dim_date.count()
     dim_date.write.mode("overwrite").parquet(f"{silver_path}/dim_date")
+    print(f"dim_date successfully saved. Rows: {row_count}")
+    dim_date.unpersist()
     spark.stop()
-    print("dim_date successfully saved.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

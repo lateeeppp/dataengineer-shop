@@ -3,6 +3,15 @@
 *.json
 docs/
 data/
+keys/
+
+# AIRFLOW
+airflow/airflow.cfg
+airflow/airflow_login.py
+airflow/dbinit.py
+airflow/initdb.py
+airflow/secrets.py
+airflow/logs/
 
 # Python-generated files
 __pycache__/
