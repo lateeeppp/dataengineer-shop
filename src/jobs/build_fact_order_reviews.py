@@ -25,7 +25,10 @@ def main(execution_date: str, raw_path: str, silver_path: str):
         .withColumn("purchase_date", F.to_date(F.to_timestamp("order_purchase_timestamp")))
         .withColumn("date_key", F.date_format("purchase_date", "yyyyMMdd").cast("int"))
         .withColumn("review_creation_date", F.to_date(F.to_timestamp("review_creation_date")))
-        .filter(F.col("review_creation_date").isNotNull())
+        .filter(
+            (F.col("purchase_date") == F.to_date(F.lit(execution_date)))
+            & F.col("review_creation_date").isNotNull()
+        )
         .select(
             "review_id",
             "order_id",

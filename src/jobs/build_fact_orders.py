@@ -62,8 +62,12 @@ def main(execution_date: str, raw_path: str, silver_path: str):
         .drop("seller_id")
     )
 
-    if fact_orders_full.count() == 0:
-        print(f"Warning: Tidak ada data untuk tanggal {execution_date}. Skip menulis.")
+    row_count = fact_orders_full.count()
+
+    if row_count == 0:
+        raise ValueError(
+            f"Tidak ada data fact_orders untuk execution date {execution_date}"
+        )
     else:
         (
             fact_orders_full

@@ -19,7 +19,7 @@ def main(execution_date: str, raw_path: str, silver_path: str):
         .join(df_orders_raw.select("order_id", "order_purchase_timestamp"), on="order_id", how="inner")
         .withColumn("purchase_date", F.to_date(F.to_timestamp("order_purchase_timestamp")))
         .withColumn("date_key", F.date_format("purchase_date", "yyyyMMdd").cast("int"))
-        .filter(F.col("purchase_date").isNotNull())
+        .filter(F.col("purchase_date") == F.to_date(F.lit(execution_date)))
         .select(
             "order_id",
             "payment_sequential",
