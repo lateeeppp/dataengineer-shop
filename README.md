@@ -31,15 +31,15 @@ Proyek ini mendemonstrasikan alur kerja Data Engineering end-to-end — dari ing
 
 <!-- TODO: Ganti dengan gambar arsitektur yang sudah dibuat -->
 
-![Arsitektur Pipeline](docs/architecture.png)
+![Arsitektur Pipeline](img/architecture.png)
 
 ---
 
-## 🗄️ Data Model
+<!-- ## 🗄️ Data Model
 
 <!-- TODO: Ganti dengan gambar Star Schema yang sudah dibuat -->
 
-![Star Schema](docs/star_schema.png)
+![Star Schema](docs/star_schema.png) -->
 
 ---
 
